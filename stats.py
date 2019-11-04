@@ -47,15 +47,15 @@ class stat:
                 f.write(r.text)
 
             txt = json.loads(r.text)
-            print(f"Pseudo : {player} ")
+
             #print(f"Nombre de top 1 : {txt['lifeTimeStats'][]['value']}")
-            print(f"Nombre de top 1 : {get_value(txt['lifeTimeStats'], 'Wins')}")
+
             if actual :
                 kills = txt['stats']['curr_p2']['kills']['valueInt'] + txt['stats']['curr_p10']['kills']['valueInt']+txt['stats']['curr_p9']['kills']['valueInt']
                 matches = txt['stats']['curr_p2']['matches']['valueInt'] + txt['stats']['curr_p10']['matches']['valueInt']+txt['stats']['curr_p9']['matches']['valueInt']
                 KD = round(kills/matches,2)
                 wins = txt['stats']['curr_p2']['top1']['valueInt'] + txt['stats']['curr_p10']['top1']['valueInt']+txt['stats']['curr_p9']['top1']['valueInt']
-                print(kills, KD, wins)
+
 
 
 
@@ -87,7 +87,7 @@ Kd en duo over all : {txt['stats']['p10']['kd']['value']}
 
 Nombre de top 1 en squad over all : {txt['stats']['p9']['top1']['value']}
 Kd en squad over all : {txt['stats']['p9']['kd']['value']}"""
-
+            print(ret)
             return(ret)
 
     def lastGame(self,player):
