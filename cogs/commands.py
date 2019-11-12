@@ -95,7 +95,7 @@ class GifsCommand(commands.Cog):
 
     @commands.command(aliases =["gifs","giff"])
     async def gif(self,ctx, tag):
-        print("Fortnite Stat Actual command in comming deploy on sector A2")
+        print("Gif command in comming deploy on sector A2")
         await ctx.send(g.randomGif(tag))
 
 
@@ -108,23 +108,34 @@ class Music(commands.Cog):
 
     @commands.command(pass_context = True,aliases =["summon","j","invoke","connect"])
     async def join(self,ctx):
-        channel = ctx.message.author.voice.channel
-        voice = await channel.connect()
+        if ctx.message.guild.voice_client == None:
+            if ctx.message.author.voice != None:
+                channel = ctx.message.author.voice.channel
+                voice = await channel.connect()
 
+            else : 
+                await ctx.send("Vous n'etes pas dans un chanel vocal")
+        else :
+            await ctx.send("Mayoshi est deja connectée")
     @commands.command(pass_context = True,aliases =["l","leavemealone"])
     async def leave(self,ctx):
         guild = ctx.message.guild
-        voice_client = guild.voice_client
-        await voice_client.disconnect()
-
+        if guild.voice_client != None:
+            voice_client = guild.voice_client
+            await voice_client.disconnect()
+        else :
+            await ctx.send("Mayoshi n'est pas connectée")
 
     @commands.command(pass_context = True,aliases =["pl","stream"])
     async def play(self,ctx,*,url):
         id = ctx.message.guild.id
         #Streams from a url
-        async with ctx.typing():
-            player = await YTDLSource.from_url(url, loop=self.client.loop, stream=True)
-            ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+        if ctx.message.voice_client != None :
+            async with ctx.typing():
+                player = await YTDLSource.from_url(url, loop=self.client.loop, stream=True)
+                ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+        else : 
+            await ctx.send("Mayoshi n'est pas connectée essayez ::join")
 
         await ctx.send('Now playing: {}'.format(player.title))
 
@@ -140,18 +151,28 @@ class Music(commands.Cog):
 
     @commands.command(pass_context = True,aliases =["st","stfu"])
     async def stop(self,ctx):
-        if ctx.voice_client!= None:
-            ctx.voice_client.stop()
-            await ctx.send("Musique arrétée.")
+        #print(f" \n voice client : {ctx.voice_client} ")
+        if ctx.voice_client != None:
+            if ctx.voice_client.is_playing():
+                ctx.voice_client.stop()
+                await ctx.send("Musique arrétée.")
+            else : 
+                await ctx.send("Aucune musique lancée")
+        else : 
+            await ctx.send("Mayoshi n'est pas connectée")
 
     @commands.command(pass_context = True, aliases =["p","pau"])
     async def pause(self,ctx):
+        #print(f" \n voice client : {ctx.voice_client} ")
         if ctx.voice_client!= None:
+
             if ctx.voice_client.is_playing():
                 ctx.voice_client.pause()
                 await ctx.send("Paused Music.")
             else:
                 ctx.send("No music playing.")
+        else :
+            await ctx.send("Mayoshi n'est pas connectée")
 
 
     @commands.command(pass_context = True, aliases =["cb","imissu","res","resum"])
