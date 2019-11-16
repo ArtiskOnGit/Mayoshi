@@ -113,7 +113,7 @@ class Music(commands.Cog):
                 channel = ctx.message.author.voice.channel
                 voice = await channel.connect()
 
-            else : 
+            else :
                 await ctx.send("Vous n'etes pas dans un chanel vocal")
         else :
             await ctx.send("Mayoshi est deja connectée")
@@ -130,11 +130,11 @@ class Music(commands.Cog):
     async def play(self,ctx,*,url):
         id = ctx.message.guild.id
         #Streams from a url
-        if ctx.message.voice_client != None :
+        if ctx.voice_client != None :
             async with ctx.typing():
                 player = await YTDLSource.from_url(url, loop=self.client.loop, stream=True)
                 ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
-        else : 
+        else :
             await ctx.send("Mayoshi n'est pas connectée essayez ::join")
 
         await ctx.send('Now playing: {}'.format(player.title))
@@ -156,9 +156,9 @@ class Music(commands.Cog):
             if ctx.voice_client.is_playing():
                 ctx.voice_client.stop()
                 await ctx.send("Musique arrétée.")
-            else : 
+            else :
                 await ctx.send("Aucune musique lancée")
-        else : 
+        else :
             await ctx.send("Mayoshi n'est pas connectée")
 
     @commands.command(pass_context = True, aliases =["p","pau"])
