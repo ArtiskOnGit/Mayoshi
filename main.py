@@ -38,7 +38,7 @@ async def status(ctx,*,message):
 
 @client.command()
 @commands.check(is_it_admin)
-async def guilds(ctx, extension):
+async def guilds(ctx):
     for guild in client.guilds:
         await ctx.send(guild)
 
