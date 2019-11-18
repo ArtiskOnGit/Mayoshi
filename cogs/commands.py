@@ -7,6 +7,7 @@ import giphyAPI
 import stats
 import youtube_dl
 import wikipediaApi
+import json
 
 
 s = stats.stat()
@@ -54,7 +55,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
             data = data['entries'][0]
 
         filename = data['url'] if stream else ytdl.prepare_filename(data)
-        return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
+        return cls(discord.FFmpegPCMAudio(filename,before_options = ytdl_before_options, **ffmpeg_options), data=data)
 
 
 
@@ -77,9 +78,9 @@ class FortniteStats(commands.Cog):
 
     ##FORTNITE STAT COMMANDS
     @commands.command(aliases =["stats","sta"])
-    async def stat(self,ctx, platform, player):
+    async def stat(self,ctx, platform, joueur):
         print("Fortnite Stat command in comming deploy on sector A2")
-        await ctx.send(s.player(player,platform,False))
+        await ctx.send(s.joueur(joueur,platform,False))
 
     @commands.command(aliases =["stat current","statcurr","current","curr","statactual"])
     async def statcurrent(self,ctx, platform, player):
@@ -141,11 +142,44 @@ class Music(commands.Cog):
 
         await ctx.send('Now playing: {}'.format(player.title))
 
+
+        with open("guilds.json") as file:
+            guildsData = json.loads(file.read())
+
+        try :
+            ctx.voice_client.source.volume = guildsData[id]["vol"] / 100
+            print("suscsessfuly reached the stored volume")
+        except :
+            ctx.voice_client.source.volume = 50 / 100
+
+
+
     @commands.command(pass_context = True,aliases =["vol","sound"])
     async def volume(self, ctx, volume: int):
+        id = str(ctx.guild.id)
 
         if ctx.voice_client is None:
             return await ctx.send("Mayoshi n'est connectée à aucun channel.")
+
+        file = open("guilds.json","r")
+        guildsData = json.loads(file.read())
+        print(guildsData)
+        thisGuild = {}
+        try :
+            thisGuild = guildsData[id]
+            print("suscsessfuly load data from files")
+        except KeyError :
+            guildsData.update({id : { "vol" :50, "prefix" : "::","lang" : "ENG"}})
+            thisGuild = guildsData[id]
+            thisGuild.update({"vol" : volume})
+            print("sadly iam here ")
+
+        guildsData.update({id : thisGuild})
+        print(guildsData)
+
+        file = open("guilds.json","w")
+        file.write(json.dumps(guildsData))
+        file.close()
 
         ctx.voice_client.source.volume = volume / 100
         await ctx.send(f"Volume changé à {volume}")

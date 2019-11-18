@@ -15,7 +15,7 @@ def is_it_admin(ctx):
     return(ctx.author.id == 323132281545949185)
 
 
-@client.command()
+@client.command(aliases =["rel"])
 @commands.check(is_it_admin)
 async def reload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
