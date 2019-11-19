@@ -11,7 +11,7 @@ class Giphy:
         r = requests.get(url =f"https://api.giphy.com/v1/gifs/random?api_key={API_KEY}&tag={tag}&rating=R")
         print(r)
 
-        print(r.text)
+        #print(r.text)
         rtxt = json.loads(r.text)
         if rtxt["data"] != [] :
             print(r.text)
