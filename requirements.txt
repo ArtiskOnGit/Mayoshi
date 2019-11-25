@@ -1,7 +1,7 @@
 aiohttp==3.5.4
 certifi==2019.9.11
 chardet==3.0.4
-discord.py==1.2.4
+discord.py==1.2.5
 gmplot==1.2.0
 idna==2.8
 requests==2.22.0
