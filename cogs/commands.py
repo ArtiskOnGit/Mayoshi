@@ -35,6 +35,15 @@ ffmpeg_options = {
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
+def CreateGuildData(id,volume):
+    print("writing a new data set for a guild")
+    file = open("guilds.json","r+")
+    guildsData = json.load(file.read())
+    thisGuild = {"vol" :volume, "prefix" : "::","lang" : "EN"}
+    guildsData.update({id : thisGuild})
+    file.write(json.dumps(guildsData))
+
+
 
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=0.5):
@@ -131,26 +140,30 @@ class Music(commands.Cog):
 
     @commands.command(pass_context = True,aliases =["pl","stream"])
     async def play(self,ctx,*,url):
-        id = ctx.message.guild.id
+        id = str(ctx.message.guild.id)
         #Streams from a url
         if ctx.voice_client != None :
             async with ctx.typing():
                 player = await YTDLSource.from_url(url, loop=self.client.loop, stream=True)
                 ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+
+
+                await ctx.send('Now playing: {}'.format(player.title))
+                with open("guilds.json") as file:
+                    guildsData = json.loads(file.read())
+
+                try :
+                    ctx.voice_client.source.volume = guildsData[id]["vol"] / 100
+                    print(f"suscsessfuly reached the stored volume and volume was set to {guildsData[id]['vol']}")
+                except KeyError:
+                    ctx.voice_client.source.volume = 50 / 100
+                    print("Unable to reached the stored vol")
+
+
         else :
             await ctx.send("Mayoshi n'est pas connectée essayez ::join")
 
-        await ctx.send('Now playing: {}'.format(player.title))
 
-
-        with open("guilds.json") as file:
-            guildsData = json.loads(file.read())
-
-        try :
-            ctx.voice_client.source.volume = guildsData[id]["vol"] / 100
-            print("suscsessfuly reached the stored volume")
-        except :
-            ctx.voice_client.source.volume = 50 / 100
 
 
 
@@ -161,22 +174,20 @@ class Music(commands.Cog):
         if ctx.voice_client is None:
             return await ctx.send("Mayoshi n'est connectée à aucun channel.")
 
+        print("Volume command input")
         file = open("guilds.json","r")
         guildsData = json.loads(file.read())
-        print(guildsData)
-        thisGuild = {}
+        print("guildsData.json have been opened and loaded")
+
         try :
             thisGuild = guildsData[id]
-            print("suscsessfuly load data from files")
+            print("suscsessfuly load this guild data from files")
         except KeyError :
-            guildsData.update({id : { "vol" :50, "prefix" : "::","lang" : "ENG"}})
-            thisGuild = guildsData[id]
-            thisGuild.update({"vol" : volume})
-            print("sadly iam here ")
+            CreateGuildData(id,volume)
 
+        thisGuild.update({"vol" : volume})
         guildsData.update({id : thisGuild})
         print(guildsData)
-
         file = open("guilds.json","w")
         file.write(json.dumps(guildsData))
         file.close()
