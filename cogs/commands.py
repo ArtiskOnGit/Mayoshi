@@ -80,7 +80,7 @@ class FortniteStats(commands.Cog):
     @commands.command(aliases =["stats","sta"])
     async def stat(self,ctx, platform, joueur):
         print("Fortnite Stat command in comming deploy on sector A2")
-        await ctx.send(s.joueur(joueur,platform,False))
+        await ctx.send(s.player(joueur,platform,False))
 
     @commands.command(aliases =["stat current","statcurr","current","curr","statactual"])
     async def statcurrent(self,ctx, platform, player):
