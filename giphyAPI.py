@@ -17,9 +17,9 @@ class Giphy:
             print(r.text)
             rtxt = json.loads(r.text)
             print(rtxt)
-            return(f"{rtxt['data']['url']} POWERED By Giphy")
+            return(f"{rtxt['data']['url']} - Powered by Giphy")
         else :
-            return("nombre de requêtes limitées par l'api")
+            return("You are being rate-limited by Giphy API")
 
 if __name__ == "__main__":
     g = Giphy
