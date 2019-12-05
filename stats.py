@@ -1,24 +1,18 @@
 import requests
 import json
+from TOK import TokenFortniteStat
 
+token = TokenFortniteStat
 
 
 
 URLFORTNITE  = "https://api.fortnitetracker.com/v1/store"
 
-#api_key = "13d2fcf6-915f-46c4-bc0a-6eac384b0892"
 
 def get_value(listOfDicts, key):
     for subVal in listOfDicts:
         if subVal["key"] ==  key:
             return subVal["value"]
-
-# r = requests.get(url = URLFORTNITE, headers = {"TRN-Api-Key" : "13d2fcf6-915f-46c4-bc0a-6eac384b0892"})
-#
-# print(r.text)
-# f = open ("test.json",'w')
-# f.write(json.dumps(r.text, indent = 4 ))
-# f.close()
 
 
 class stat:
@@ -27,16 +21,15 @@ class stat:
 
 
     def getPlayerId(self,player,plateform):
-        r = requests.get(url = f"https://api.fortnitetracker.com/v1/profile/{plateform}/{player}/", headers = {"TRN-Api-Key" : "13d2fcf6-915f-46c4-bc0a-6eac384b0892"})
+        r = requests.get(url = f"https://api.fortnitetracker.com/v1/profile/{plateform}/{player}/", headers = {"TRN-Api-Key" : token})
         txt = json.loads(r.text)
         return(txt["accountId"])
 
 
     def player(self,player,plateform,actual):
         print(f"https://api.fortnitetracker.com/v1/profile/{plateform}/{player}/")
-        r = requests.get(url = f"https://api.fortnitetracker.com/v1/profile/{plateform}/{player}/", headers = {"TRN-Api-Key" : "13d2fcf6-915f-46c4-bc0a-6eac384b0892"})
-        #print(r.text)
-        print(r)
+        r = requests.get(url = f"https://api.fortnitetracker.com/v1/profile/{plateform}/{player}/", headers = {"TRN-Api-Key" : token})
+        #print(r)
 
         if "It's not you, it's us. We had an error. These things happen. If it keeps happening, please" in r.text :
             return("On dirait que vous n'etes pas dans fortnite tracker ou  que vous avez mal tapé votre pseudo, essayez directement depuis leur site : https://fortnitetracker.com/")
@@ -48,7 +41,6 @@ class stat:
 
             txt = json.loads(r.text)
 
-            #print(f"Nombre de top 1 : {txt['lifeTimeStats'][]['value']}")
 
             if actual :
                 kills = txt['stats']['curr_p2']['kills']['valueInt'] + txt['stats']['curr_p10']['kills']['valueInt']+txt['stats']['curr_p9']['kills']['valueInt']
@@ -91,13 +83,6 @@ Kd en squad over all : {txt['stats']['p9']['kd']['value']}"""
             return(ret)
 
     def lastGame(self,player):
-        r = requests.get(url = f"GET https://api.fortnitetracker.com/v1/profile/account/{self.getPlayerId(player,'pc')}/matches/", headers = {"TRN-Api-Key" : "13d2fcf6-915f-46c4-bc0a-6eac384b0892"})
+        r = requests.get(url = f"GET https://api.fortnitetracker.com/v1/profile/account/{self.getPlayerId(player,'pc')}/matches/", headers = {"TRN-Api-Key" : token})
         with open("historic.html", "w", encoding = "utf-8") as f:
             f.write(r.text)
-
-
-
-
-
-
-#stat.player(input("Pseudo >> "),input("Plateforme >> "),True)
