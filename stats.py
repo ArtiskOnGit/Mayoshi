@@ -39,9 +39,9 @@ class stat:
         print(r)
 
         if "It's not you, it's us. We had an error. These things happen. If it keeps happening, please" in r.text :
-            return("On dirait que vous n'etes pas dans fortnite tracker ou  que vous avez mal tapé votre pseudo, essayez directement depuis leur site : https://fortnitetracker.com/")
+            return("It seems that you aren't in Fortnite Tracker, or that you misspelled your nickname. Try directly from their website : https://fortnitetracker.com/")
         elif "40" in r:
-            return("Les services de Fortnite Tracker sont inatteignable")
+            return("Fortnite Trackers' servers aren't accessible. Try again later !")
         else:
             with open("test.html", "w", encoding = "utf-8") as f:
                 f.write(r.text)
@@ -60,33 +60,33 @@ class stat:
 
 
                 ret = f"""Pseudo : {player}
-Nombre de top1 cette saison : {wins}
-Nombre de kills cette saison : {kills}
-Kd cette saison : {KD}
+Number of Top #1 this season : {wins}
+Number of kills this season : {kills}
+K/D ratio this season : {KD}
 
-Nombre de top 1 en solo cette saison : {txt['stats']['curr_p2']['top1']['value']}
-Kd en solo cette saison : {txt['stats']['curr_p2']['kd']['value']}
+Solo Top #1 this season : {txt['stats']['curr_p2']['top1']['value']}
+Solo K/D ratio this season : {txt['stats']['curr_p2']['kd']['value']}
 
-Nombre de top 1 en duo cette saison : {txt['stats']['curr_p10']['top1']['value']}
-Kd en duo cette saison : {txt['stats']['curr_p10']['kd']['value']}
+Duo Top #1 this season : {txt['stats']['curr_p10']['top1']['value']}
+Duo K/D Ratio this season : {txt['stats']['curr_p10']['kd']['value']}
 
 Nombre de top 1 en squad cette saison : {txt['stats']['curr_p9']['top1']['value']}
 Kd en squad cette saison : {txt['stats']['curr_p9']['kd']['value']}"""
             else:
 
                 ret = f"""Pseudo : {player}
-Nombre de top 1 totals: {get_value(txt['lifeTimeStats'], 'Wins')}
-Nombre de kills totals : {get_value(txt['lifeTimeStats'], 'Kills')}
-KD : {get_value(txt['lifeTimeStats'], 'K/d')}
+Total Top #1 this season: {get_value(txt['lifeTimeStats'], 'Wins')}
+Total kills this season : {get_value(txt['lifeTimeStats'], 'Kills')}
+K/D Ratio : {get_value(txt['lifeTimeStats'], 'K/d')}
 
-Nombre de top 1 en solo over all : {txt['stats']['p2']['top1']['value']}
-Kd en solo over all : {txt['stats']['p2']['kd']['value']}
+Solo Top #1 overall : {txt['stats']['p2']['top1']['value']}
+Solo K/D Ratio overall : {txt['stats']['p2']['kd']['value']}
 
-Nombre de top 1 en duo over all : {txt['stats']['p10']['top1']['value']}
-Kd en duo over all : {txt['stats']['p10']['kd']['value']}
+Duo Top #1 overall : {txt['stats']['p10']['top1']['value']}
+Duo K/D Ratio overall: {txt['stats']['p10']['kd']['value']}
 
-Nombre de top 1 en squad over all : {txt['stats']['p9']['top1']['value']}
-Kd en squad over all : {txt['stats']['p9']['kd']['value']}"""
+Squad Top #1 overall : {txt['stats']['p9']['top1']['value']}
+Squad K/D Ratio overall : {txt['stats']['p9']['kd']['value']}"""
             print(ret)
             return(ret)
 
@@ -100,4 +100,4 @@ Kd en squad over all : {txt['stats']['p9']['kd']['value']}"""
 
 
 
-#stat.player(input("Pseudo >> "),input("Plateforme >> "),True)
+#stat.player(input("Nickname >> "),input("Platform >> "),True)
