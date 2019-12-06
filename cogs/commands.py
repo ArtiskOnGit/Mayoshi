@@ -179,6 +179,9 @@ class Music(commands.Cog):
         if ctx.voice_client is None:
             return await ctx.send("Mayoshi n'est connectée à aucun channel.")
 
+        if ctx.voice_client.source is None:
+            return await ctx.send("Mayoshi ne joue pas de musique.")
+
         print("Volume command input")
         file = open("guilds.json","r")
         guildsData = json.loads(file.read())
@@ -196,7 +199,6 @@ class Music(commands.Cog):
         except KeyError :
             print("Creating guild data")
             CreateGuildData(id,volume)
-            pass
 
 
 
