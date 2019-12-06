@@ -10,6 +10,7 @@ client = commands.Bot(command_prefix = '::')
 @client.event
 async def on_ready():
     print("Bot connected")
+    await client.change_presence(activity=discord.Game("Mayoshi is on twitter @mayoshi16"))
 
 def is_it_admin(ctx):
     return(ctx.author.id == 323132281545949185)
