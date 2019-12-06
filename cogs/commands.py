@@ -37,10 +37,14 @@ ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
 def CreateGuildData(id,volume):
     print("writing a new data set for a guild")
-    file = open("guilds.json","r+")
-    guildsData = json.load(file.read())
+
+
+    with open("guilds.json") as file:
+        guildsData = json.loads(file.read())
+
+    file = open("guilds.json","w")
     thisGuild = {"vol" :volume, "prefix" : "::","lang" : "EN"}
-    guildsData.update({id : thisGuild})
+    guildsData.update({str(id) : thisGuild})
     file.write(json.dumps(guildsData))
 
 
@@ -129,6 +133,7 @@ class Music(commands.Cog):
                 await ctx.send("Vous n'etes pas dans un chanel vocal")
         else :
             await ctx.send("Mayoshi est deja connectée")
+
     @commands.command(pass_context = True,aliases =["l","leavemealone"])
     async def leave(self,ctx):
         guild = ctx.message.guild
@@ -181,16 +186,20 @@ class Music(commands.Cog):
 
         try :
             thisGuild = guildsData[id]
-            print("suscsessfuly load this guild data from files")
+            print(f"suscsessfuly load this guild data from files for guild : {id}")
+            thisGuild.update({"vol" : volume})
+            guildsData.update({id : thisGuild})
+            print(guildsData)
+            file = open("guilds.json","w")
+            file.write(json.dumps(guildsData))
+            file.close()
         except KeyError :
+            print("Creating guild data")
             CreateGuildData(id,volume)
+            pass
 
-        thisGuild.update({"vol" : volume})
-        guildsData.update({id : thisGuild})
-        print(guildsData)
-        file = open("guilds.json","w")
-        file.write(json.dumps(guildsData))
-        file.close()
+
+
 
         ctx.voice_client.source.volume = volume / 100
         await ctx.send(f"Volume changé à {volume}")
