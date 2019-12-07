@@ -116,14 +116,18 @@ class Music(commands.Cog):
         self.client = client
         self.client.loop.create_task(self.bouclePlay())
 
-    def checkQueue(self,ctx):
-        id = str(ctx.message.guild.id)
-        print("CHECKING QUEUE")
-        print(f"queue : {queue}")
-        print (queue[id] !=[])
-        if queue[id] !=[]:
-            print("playing next  music")
-            ctx.voice_client.play(queue[id])
+
+
+    def ChangingVolumeFromFile(self,ctx):
+        #Change the volume to the volume stored for this server
+        with open("guilds.json") as file:
+                guildsData = json.loads(file.read())
+        try :
+            ctx.voice_client.source.volume = guildsData[id]["vol"] / 100
+            print(f"suscsessfuly reached the stored volume and volume was set to {guildsData[id]['vol']}")
+        except KeyError:
+            ctx.voice_client.source.volume = 50 / 100
+            print("Unable to reached the stored vol")
 
 
 
@@ -131,20 +135,14 @@ class Music(commands.Cog):
         await self.client.wait_until_ready()
 
         while queue != {}:
-            #print(f"la queue est : {queue}")
-        #print(f"queue is not empty :{queue}")
             for key,value in queue.items():
                 if value != []:
-                    # print(f"key : {key}")
-                    # print(f"value : {value}")
                     self.playern,self.ctx = value[0]
-
-
-                    #print (f"ctx est {self.ctx}")
                     if self.ctx.voice_client.is_playing() == False :
                         id = str(self.ctx.message.guild.id)
                         await self.ctx.send(f"Now playing : {self.playern.title}")
                         self.ctx.voice_client.play(self.playern)
+                        self.ChangingVolumeFromFile(self.ctx)
                         queue[id].pop(0)
                         if value == []:
                             del queue[id]
@@ -175,7 +173,6 @@ class Music(commands.Cog):
     @commands.command(name = "play", pass_context = True,aliases =["pl","stream"])
     async def play(self,ctx,*,url):
         id = str(ctx.message.guild.id)
-        #Streams from a url
         if ctx.voice_client != None :
             print(f"this guild have is playing : {ctx.voice_client.is_playing()}")
             try :
@@ -196,15 +193,7 @@ class Music(commands.Cog):
 
 
 
-            #Change the volume to the volume stored for this server
-            # with open("guilds.json") as file:
-            #         guildsData = json.loads(file.read())
-            # try :
-            #     ctx.voice_client.source.volume = guildsData[id]["vol"] / 100
-            #     print(f"suscsessfuly reached the stored volume and volume was set to {guildsData[id]['vol']}")
-            # except KeyError:
-            #     ctx.voice_client.source.volume = 50 / 100
-            #     print("Unable to reached the stored vol")
+
 
 
 
@@ -219,7 +208,16 @@ class Music(commands.Cog):
 
     @commands.command(pass_context = True)
     async def queue(self,ctx):
-        await ctx.send(f"The queue is {queue}")
+        id = str(ctx.message.guild.id)
+        try :
+            if queue[id] != []:
+                queue[id]
+                await ctx.send(f"The queue is :")
+                for i in queue[id]:
+                    self.nextPlayer,_ = i
+                    await ctx.send(f" - {self.nextPlayer.title}")
+        except KeyError:
+                await ctx.send("No queue available")
 
 
     @commands.command(pass_context = True,aliases =["vol","sound"])
