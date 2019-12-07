@@ -8,7 +8,7 @@ import stats
 import youtube_dl
 import wikipediaApi
 import json
-
+import asyncio
 
 s = stats.stat()
 g = giphyAPI.Giphy()
@@ -100,11 +100,6 @@ class FortniteStats(commands.Cog):
         print("Fortnite Stat Actual command in comming deploy on sector A2")
         await ctx.send(s.player(player,platform,True))
 
-
-
-
-players = {}
-
 class GifsCommand(commands.Cog):
     def __init__(self,client):
         self.client = client
@@ -115,12 +110,46 @@ class GifsCommand(commands.Cog):
         await ctx.send(g.randomGif(tag))
 
 
-
-players = {}
-
+queue = {}
 class Music(commands.Cog):
     def __init__(self,client):
         self.client = client
+        self.client.loop.create_task(self.bouclePlay())
+
+    def checkQueue(self,ctx):
+        id = str(ctx.message.guild.id)
+        print("CHECKING QUEUE")
+        print(f"queue : {queue}")
+        print (queue[id] !=[])
+        if queue[id] !=[]:
+            print("playing next  music")
+            ctx.voice_client.play(queue[id])
+
+
+
+    async def bouclePlay(self):
+        await self.client.wait_until_ready()
+
+        while queue != {}:
+            #print(f"la queue est : {queue}")
+        #print(f"queue is not empty :{queue}")
+            for key,value in queue.items():
+                if value != []:
+                    # print(f"key : {key}")
+                    # print(f"value : {value}")
+                    self.playern,self.ctx = value[0]
+
+
+                    #print (f"ctx est {self.ctx}")
+                    if self.ctx.voice_client.is_playing() == False :
+                        id = str(self.ctx.message.guild.id)
+                        await self.ctx.send(f"Now playing : {self.playern.title}")
+                        self.ctx.voice_client.play(self.playern)
+                        queue[id].pop(0)
+                        if value == []:
+                            del queue[id]
+            await asyncio.sleep(3)
+
 
     @commands.command(pass_context = True,aliases =["summon","j","invoke","connect"])
     async def join(self,ctx):
@@ -143,33 +172,54 @@ class Music(commands.Cog):
         else :
             await ctx.send("Mayoshi n'est pas connectée")
 
-    @commands.command(pass_context = True,aliases =["pl","stream"])
+    @commands.command(name = "play", pass_context = True,aliases =["pl","stream"])
     async def play(self,ctx,*,url):
         id = str(ctx.message.guild.id)
         #Streams from a url
         if ctx.voice_client != None :
-            async with ctx.typing():
-                player = await YTDLSource.from_url(url, loop=self.client.loop, stream=True)
-                ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+            print(f"this guild have is playing : {ctx.voice_client.is_playing()}")
+            try :
+                q = queue[id]
+            except KeyError:
+                queue[id] = []
+
+            print("adding a player in queue")
+            self.playerq = await YTDLSource.from_url(url, loop=self.client.loop, stream=True)
+            self.nextsong = (self.playerq,ctx)
+            self.actqueue = queue[id]
+            self.actqueue.append(self.nextsong)
+            queue.update({id : self.actqueue})
+            print(self.nextsong)
+            print(queue)
+            await ctx.send(f"Added to queue : {self.playerq.title}")
+            await self.bouclePlay()
 
 
-                await ctx.send('Now playing: {}'.format(player.title))
-                with open("guilds.json") as file:
-                    guildsData = json.loads(file.read())
 
-                try :
-                    ctx.voice_client.source.volume = guildsData[id]["vol"] / 100
-                    print(f"suscsessfuly reached the stored volume and volume was set to {guildsData[id]['vol']}")
-                except KeyError:
-                    ctx.voice_client.source.volume = 50 / 100
-                    print("Unable to reached the stored vol")
+            #Change the volume to the volume stored for this server
+            # with open("guilds.json") as file:
+            #         guildsData = json.loads(file.read())
+            # try :
+            #     ctx.voice_client.source.volume = guildsData[id]["vol"] / 100
+            #     print(f"suscsessfuly reached the stored volume and volume was set to {guildsData[id]['vol']}")
+            # except KeyError:
+            #     ctx.voice_client.source.volume = 50 / 100
+            #     print("Unable to reached the stored vol")
+
+
+
+
+
+
 
 
         else :
             await ctx.send("Mayoshi n'est pas connectée essayez ::join")
 
 
-
+    @commands.command(pass_context = True)
+    async def queue(self,ctx):
+        await ctx.send(f"The queue is {queue}")
 
 
     @commands.command(pass_context = True,aliases =["vol","sound"])
@@ -209,11 +259,13 @@ class Music(commands.Cog):
 
     @commands.command(pass_context = True,aliases =["st","stfu"])
     async def stop(self,ctx):
+        id = str(ctx.message.guild.id)
         #print(f" \n voice client : {ctx.voice_client} ")
         if ctx.voice_client != None:
             if ctx.voice_client.is_playing():
                 ctx.voice_client.stop()
                 await ctx.send("Musique arrétée.")
+                queue[id] = []
             else :
                 await ctx.send("Aucune musique lancée")
         else :
@@ -242,6 +294,20 @@ class Music(commands.Cog):
                 await ctx.send("Resumed Music.")
             else:
                 await ctx.send("Music is not paused.")
+
+    @commands.command(pass_context = True, aliases =["sk"])
+    async def skip(self,ctx):
+        id = str(ctx.message.guild.id)
+        #print(f" \n voice client : {ctx.voice_client} ")
+        if ctx.voice_client != None:
+            if ctx.voice_client.is_playing():
+                ctx.voice_client.stop()
+                await ctx.send("Musique arrétée.")
+            else :
+                await ctx.send("Aucune musique lancée")
+        else :
+            await ctx.send("Mayoshi n'est pas connectée")
+
 
 
 class wikipediaInfos(commands.Cog):
