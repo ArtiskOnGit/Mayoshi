@@ -313,7 +313,7 @@ class wikipediaInfos(commands.Cog):
         self.client = client
 
     @commands.command(pass_context = True, aliases =["wikipedia","wikip"])
-    async def wiki(self,ctx,lf):
+    async def wiki(self,ctx,*,lf):
         await ctx.send(wikipediaApi.wiki.WSearch(lf))
 
 
