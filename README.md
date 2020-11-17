@@ -1,20 +1,20 @@
 # Mayoshi
-<h1>Hi, I'm Mayoshi, your fun multipurpose <del>friend</del> bot</h1>
-<p>I will listens to some good music with you ༼ つ ◕_◕ ༽つ :</p>
- - ::join to make mayoshi joins you in your epic journey
- - ::play {a youtube url or the title of a music} adds a new epic music to the queue
- - ::skip skips that bad music your friend turn on
- - ::pause
- - ::resume
- - ::stop
- - ::volume {an integer} change the volume
- - ::leave goodbye mayoshi, see you next time
+<h1>Hi, I'm Mayoshi, your fun multipurpose <del>friend</del> bot</h1><br><br>
+<h2>I will listens to some good music with you ༼ つ ◕_◕ ༽つ :</h2>
+<ul><li>::join <i>to make mayoshi joins you in your epic journey</i></li>
+<li>::play {a youtube url or the title of a music}    <i>adds a new epic music to the queue</i></li>
+<li>::skip <i>skips that bad music your friend turn on</i></li>
+<li>::pause</li>
+<li>::resume</li>
+<li>::stop</li>
+<li>::volume {an integer} <i>change the volume</i></li>
+<li>::leave <i>goodbye mayoshi, see you next time</i></ul>
  	
-<p>I love to look things on wikipedia :</p>
- - ::wiki {a cool subjec} I will give you some brief infos about that amazing subject you want to learn about
+<h2>I love to look things on wikipedia :</h2>
+ <ul><li>::wiki {a cool subject} <i>I will give you some brief infos about that amazing subject you want to learn about</i></li></ul>
 
-<p>Have you seen that gif with the cat that goes tudududu ?</p>
- - ::gif {probably cat but anything you want really}
+<h2>Have you seen that gif with the cat that goes tudududu ?</h2>
+<ul><li>::gif {probably cat but anything you want really}</li></ul>
  
- <p> ALRIGHT I play fortnite, that is what it is, but do you want to know how much wins do you have ?</p>
- - ::stat {the plateform you play on (pc/xb1/ps4)} {your ingame name}
+ <h2> ALRIGHT I play fortnite, that is what it is, but do you want to know how much wins do you have ?</h2>
+<ul><li>::stat {the plateform you play on (pc/xb1/ps4)} {your ingame name}</li></ul> <i> I will tell you about how you are not that good at the game, sorry for thaat!</i>
