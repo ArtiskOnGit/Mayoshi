@@ -17,4 +17,4 @@
 <ul><li>::gif {probably cat but anything you want really}</li></ul>
  
  <h2> ALRIGHT I play fortnite, that is what it is, but do you want to know how much wins do you have ?</h2>
-<ul><li>::stat {the plateform you play on (pc/xb1/ps4)} {your ingame name}</li></ul> <i> I will tell you about how you are not that good at the game, sorry for thaat!</i>
+<ul><li>::stat {the plateform you play on (pc/xb1/ps4)} {your ingame name} <i> I will tell you about how you are not that good at the game, sorry for thaat!</i></li></ul>
