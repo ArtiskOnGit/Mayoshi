@@ -1,6 +1,6 @@
 # Mayoshi
 <h1>Hi, I'm Mayoshi, your fun multipurpose <del>friend</del> bot</h1><br><br>
-<h2>I will listens to some good music with you ༼ つ ◕_◕ ༽つ :</h2>
+<h2>I will listen to some good music with you ༼ つ ◕_◕ ༽つ :</h2>
 <ul><li>::join <i>to make mayoshi joins you in your epic journey</i></li>
 <li>::play {a youtube url or the title of a music}    <i>adds a new epic music to the queue</i></li>
 <li>::skip <i>skips that bad music your friend turn on</i></li>
