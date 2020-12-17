@@ -4,7 +4,7 @@ chardet==4.0.0
 discord.py==1.5.1
 gmplot==1.4.1
 idna==2.10
-requests==2.25.0
+requests==2.25.1
 urllib3==1.26.2
 websockets==8.1
 youtube-dl==2020.12.14
