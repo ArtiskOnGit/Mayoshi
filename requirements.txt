@@ -1,4 +1,4 @@
-aiohttp==3.8.3
+aiohttp==3.8.4
 certifi==2022.6.15
 chardet==5.0.0
 discord.py==1.7.3
